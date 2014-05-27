@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<adios-config host-language="C" schema-version="1.1">
+    <adios-group name="writer3D" coordination-communicator="comm">
+    <var name="nx_global" gwrite="sim->global_dims[0]" type="integer"/>
+    <var name="ny_global" gwrite="sim->global_dims[1]" type="integer"/>
+    <var name="nz_global" gwrite="sim->global_dims[2]" type="integer"/>
+<!--
+    <var name="nx_global" gwrite="LONGITUDE_SIZE" type="integer"/>
+    <var name="ny_global" gwrite="LATITUDE_SIZE" type="integer"/>
+    <var name="nz_global" gwrite="LEVELS_SIZE" type="integer"/>
+-->
+    <var name="offs_x"   type="integer"/>
+    <var name="offs_y"   type="integer"/>
+    <var name="offs_z"   type="integer"/>
+    <var name="Ncolumns" gwrite="sim->grid.Ncolumns" type="integer"/>
+    <var name="Nrows"    gwrite="sim->grid.Nrows" type="integer"/>
+    <var name="Nlevels"  gwrite="sim->grid.Nlevels" type="integer"/>
+    <global-bounds dimensions="nz_global,ny_global,nx_global" offsets="offs_z,offs_y,offs_x">
+       <var name="/data/data-00" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[0]" dimensions="Nlevels,Nrows,Ncolumns"/>
+       <var name="/data/data-01" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[1]" dimensions="Nlevels,Nrows,Ncolumns"/>
+       <var name="/data/data-02" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[2]" dimensions="Nlevels,Nrows,Ncolumns"/>
+       <var name="/data/data-03" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[3]" dimensions="Nlevels,Nrows,Ncolumns"/>
+       <var name="/data/data-04" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[4]" dimensions="Nlevels,Nrows,Ncolumns"/>
+       <var name="/data/data-05" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[5]" dimensions="Nlevels,Nrows,Ncolumns"/>
+       <var name="/data/data-06" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[6]" dimensions="Nlevels,Nrows,Ncolumns"/>
+       <var name="/data/data-07" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[7]" dimensions="Nlevels,Nrows,Ncolumns"/>
+       <var name="/data/data-08" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[8]" dimensions="Nlevels,Nrows,Ncolumns"/>
+       <var name="/data/data-09" mesh="my_mesh" center="node" type="float" gwrite="sim->grid.data[9]" dimensions="Nlevels,Nrows,Ncolumns"/>
+<!--
+       <var name="/data/data-00" type="float" gwrite="sim->grid.data[0]" dimensions="Nlevels,Nrows,Ncolumns" transform="zlib:9"/>
+-->
+    </global-bounds>
+    <mesh name="my_mesh" type="uniform" time-varying="no">
+      <dimensions value="nx_global,ny_global,nz_global" />
+<!--
+-->
+      <origin value="-.5,-.5,0." />
+      <spacing value=".00195694716242661448,.00195694716242661448,.01587301587301587301" />
+    </mesh>
+    <attribute name="description" type="string" path="/writer3D" value="global distributed data written by processors"/>
+</adios-group>
+
+<!-- <method group="writer3D" method="NC4"/> -->
+
+<!--
+<method group="writer3D" method="MPI_AGGREGATE">
+stripe_count=64,stripe_size=1048576,block_size=4194304,num_aggregators=4,merging_pgs=0;num_ost=72
+</method>
+-->
+
+<!--
+<method group="writer3D" method="POSIX"> </method>
+-->
+
+<!--
+<method group="writer3D" method="MPI_LUSTRE">
+stripe_count=32
+stripe_size=1048576
+block_size=16777216
+</method>
+-->
+<!-- commented because with Lustreapi option enabled in configuration, MPI_LUSTRE sets the parameters automatically and therefore parameters in XML are not required
+-->
+<method group="writer3D" method="MPI_LUSTRE">
+
+<!-- 
+<method group="writer3D" method="MPI"/> 
+-->
+
+<!-- 
+<method group="writer3D" method="PHDF5"/> 
+-->
+
+<buffer size-MB="68" allocate-time="now"/>
+</adios-config>
