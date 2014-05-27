@@ -1,0 +1,57 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --time=00:2:00
+#SBATCH --job-name="staff"
+#SBATCH --output=o_a.out.0008.8.1.daint.
+#SBATCH --error=o_a.out.0008.8.1.daint.
+##SBATCH --account=usup
+####SBATCH --reservation=maint
+
+ulimit -c unlimited
+ulimit -s unlimited
+ulimit -a 
+
+echo  "Running on nodes $SLURM_JOB_NODELIST"
+# sacct --format=JobID,NodeList%100 -j $SLURM_JOB_ID
+# export MPICH_CPUMASK_DISPLAY=1        # = core of the rank
+# The distribution of MPI tasks on the nodes can be written to the standard output file by setting environment variable 
+# export MPICH_RANK_REORDER_DISPLAY=1   # = node of the rank
+export MALLOC_MMAP_MAX_=0
+export MALLOC_TRIM_THRESHOLD_=536870912
+export OMP_NUM_THREADS=1
+export MPICH_VERSION_DISPLAY=1
+export MPICH_ENV_DISPLAY=1
+#export PAT_RT_CALLSTACK_BUFFER_SIZE=50000000 # > 4194312
+#export OMP_STACKSIZE=500M
+
+
+
+# export PAT_RT_EXPFILE_MAX=99999
+# export PAT_RT_SUMMARY=0
+#
+#export PAT_RT_TRACE_FUNCTION_MAX=1024 
+#export PAT_RT_EXPFILE_PES
+#export MPICH_PTL_MATCH_OFF=1
+#export MPICH_PTL_OTHER_EVENTS=4096
+#export MPICH_MAX_SHORT_MSG_SIZE=32000
+#export MPICH_PTL_UNEX_EVENTS=180000
+#export MPICH_UNEX_BUFFER_SIZE=284914560
+#export MPICH_COLL_OPT_OFF=mpi_allgather
+#export MPICH_COLL_OPT_OFF=mpi_allgatherv
+export MPICH_NO_BUFFER_ALIAS_CHECK=1
+#NEW export MPICH_MPIIO_STATS=1
+
+echo "submit command : /users/piccinal/KEEP/slurm/sbatch.sh daint 2 ./a.out 8 8 1    -Ausup"
+
+echo "SLURM_JOB_NAME=$SLURM_JOB_NAME" "SLURM_JOBID=$SLURM_JOBID SLURM_JOB_ID=$SLURM_JOB_ID SLURM_TASK_PID=$SLURM_TASK_PID OMP_NUM_THREADS=$OMP_NUM_THREADS"
+date
+
+set +x
+/usr/bin/time -p  aprun -n 8 -N 8 -d 1  ./a.out  
+# mv wave_tank1.h5 8.wave_tank1.h5
+
+# -n  -N  / 
+## SBATCH --ntasks=1024
+## SBATCH --ntasks-per-node=1
+## SBATCH --ntasks-per-core=2
+## SBATCH --cpus-per-task=32
