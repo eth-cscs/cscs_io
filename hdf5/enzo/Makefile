@@ -1,5 +1,5 @@
 CC       = CC
-FLAGS    = -O3
+FLAGS    = -O3 # -g
 DDTFLAGS = 
 H := $(shell echo $(HOST) | tr [a-z] [A-Z] | tr -d [0-9] )
 

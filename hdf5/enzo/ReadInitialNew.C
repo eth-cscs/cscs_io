@@ -1,3 +1,5 @@
+// sed "s-CSCS CSCS-64-" ReadInitialNew.templatejg > ReadInitialNew.C
+
 #ifdef USEMPI
 #include "mpi.h"
 #endif
